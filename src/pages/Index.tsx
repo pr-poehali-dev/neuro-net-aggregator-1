@@ -103,11 +103,13 @@ const Index = () => {
             <div className="hidden md:flex items-center space-x-6">
               <button onClick={() => scrollToSection('home')} className="text-sm font-medium hover:text-primary transition-colors">Главная</button>
               <button onClick={() => scrollToSection('catalog')} className="text-sm font-medium hover:text-primary transition-colors">Каталог</button>
+              <button onClick={() => navigate('/compare')} className="text-sm font-medium hover:text-primary transition-colors">Сравнение</button>
               <button onClick={() => scrollToSection('pricing')} className="text-sm font-medium hover:text-primary transition-colors">Тарифы</button>
             </div>
 
-            <Button className="bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity">
-              Начать <Icon name="ArrowRight" size={16} className="ml-2" />
+            <Button onClick={() => navigate('/compare')} className="bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity">
+              <Icon name="Scale" size={16} className="mr-2" />
+              Сравнить
             </Button>
           </div>
         </div>
