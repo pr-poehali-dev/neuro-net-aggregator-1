@@ -6,53 +6,11 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
-
-interface AITool {
-  id: number;
-  name: string;
-  category: string;
-  description: string;
-  rating: number;
-  price: string;
-  priceValue: number;
-  features: string[];
-  icon: string;
-  gradient: string;
-  popularity: number;
-}
+import { aiTools, categories } from '@/data/aiTools';
 
 const Index = () => {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('home');
-
-  const aiTools: AITool[] = [
-    { id: 1, name: 'ChatGPT', category: 'Текст', description: 'Продвинутый языковой ИИ для генерации текста и диалогов', rating: 4.9, price: 'Freemium', priceValue: 1, features: ['Генерация текста', 'Диалоги', 'Код', 'Анализ'], icon: 'MessageSquare', gradient: 'from-purple-500 to-pink-500', popularity: 98 },
-    { id: 2, name: 'Midjourney', category: 'Изображения', description: 'Создание уникальных изображений из текстовых описаний', rating: 4.8, price: 'Платно', priceValue: 2, features: ['Генерация изображений', 'Высокое качество', 'Стилизация'], icon: 'Image', gradient: 'from-blue-500 to-cyan-500', popularity: 95 },
-    { id: 3, name: 'ElevenLabs', category: 'Аудио', description: 'Реалистичный синтез голоса и клонирование', rating: 4.7, price: 'Freemium', priceValue: 1, features: ['Синтез речи', 'Клонирование голоса', 'Множество языков'], icon: 'Mic', gradient: 'from-green-500 to-emerald-500', popularity: 88 },
-    { id: 4, name: 'Runway ML', category: 'Видео', description: 'Генерация и редактирование видео с помощью ИИ', rating: 4.6, price: 'Freemium', priceValue: 1, features: ['Генерация видео', 'Редактирование', 'Эффекты'], icon: 'Video', gradient: 'from-orange-500 to-red-500', popularity: 85 },
-    { id: 5, name: 'GitHub Copilot', category: 'Код', description: 'ИИ-помощник для написания кода', rating: 4.8, price: 'Платно', priceValue: 2, features: ['Автодополнение', 'Генерация функций', 'Рефакторинг'], icon: 'Code', gradient: 'from-indigo-500 to-purple-500', popularity: 92 },
-    { id: 6, name: 'Jasper AI', category: 'Маркетинг', description: 'Контент для маркетинга и копирайтинга', rating: 4.5, price: 'Платно', priceValue: 2, features: ['SEO-тексты', 'Рекламные копии', 'Email-рассылки'], icon: 'TrendingUp', gradient: 'from-yellow-500 to-orange-500', popularity: 82 },
-    { id: 7, name: 'Claude AI', category: 'Текст', description: 'Умный ассистент для сложных задач и анализа', rating: 4.8, price: 'Freemium', priceValue: 1, features: ['Длинные контексты', 'Анализ документов', 'Безопасность'], icon: 'Brain', gradient: 'from-violet-500 to-purple-500', popularity: 90 },
-    { id: 8, name: 'DALL-E 3', category: 'Изображения', description: 'Генерация изображений от OpenAI с высокой точностью', rating: 4.7, price: 'Freemium', priceValue: 1, features: ['Точность промпта', 'Интеграция с ChatGPT', 'Редактирование'], icon: 'Palette', gradient: 'from-pink-500 to-rose-500', popularity: 87 },
-    { id: 9, name: 'Stable Diffusion', category: 'Изображения', description: 'Открытая нейросеть для генерации изображений', rating: 4.6, price: 'Бесплатно', priceValue: 0, features: ['Open Source', 'Кастомизация', 'Локальный запуск'], icon: 'Layers', gradient: 'from-cyan-500 to-blue-500', popularity: 84 },
-    { id: 10, name: 'Perplexity AI', category: 'Поиск', description: 'Умный поисковик с источниками и анализом', rating: 4.7, price: 'Freemium', priceValue: 1, features: ['Поиск с источниками', 'Актуальные данные', 'Быстрый ответ'], icon: 'Search', gradient: 'from-blue-500 to-indigo-500', popularity: 79 },
-    { id: 11, name: 'Gemini', category: 'Текст', description: 'Мультимодальный ИИ от Google с широкими возможностями', rating: 4.6, price: 'Freemium', priceValue: 1, features: ['Работа с изображениями', 'Большой контекст', 'Интеграция Google'], icon: 'Sparkles', gradient: 'from-blue-400 to-purple-400', popularity: 86 },
-    { id: 12, name: 'Notion AI', category: 'Продуктивность', description: 'ИИ-помощник для управления задачами и заметками', rating: 4.5, price: 'Платно', priceValue: 2, features: ['Умные заметки', 'Автосоздание контента', 'Интеграция Notion'], icon: 'FileText', gradient: 'from-gray-500 to-slate-500', popularity: 81 },
-    { id: 13, name: 'Synthesia', category: 'Видео', description: 'Создание видео с AI-аватарами и озвучкой', rating: 4.4, price: 'Платно', priceValue: 2, features: ['AI-аватары', 'Озвучка', 'Множество языков'], icon: 'MonitorPlay', gradient: 'from-purple-500 to-indigo-500', popularity: 75 },
-    { id: 14, name: 'Adobe Firefly', category: 'Изображения', description: 'Генеративный ИИ для креативных профессионалов', rating: 4.6, price: 'Freemium', priceValue: 1, features: ['Интеграция Adobe', 'Профессиональное качество', 'Коммерческое использование'], icon: 'Wand2', gradient: 'from-red-500 to-orange-500', popularity: 83 },
-    { id: 15, name: 'Copy.ai', category: 'Маркетинг', description: 'Генерация маркетинговых текстов за секунды', rating: 4.4, price: 'Freemium', priceValue: 1, features: ['Маркетинг', 'Соцсети', 'Email'], icon: 'PenTool', gradient: 'from-teal-500 to-cyan-500', popularity: 77 },
-    { id: 16, name: 'Murf AI', category: 'Аудио', description: 'Профессиональная озвучка текста человеческим голосом', rating: 4.5, price: 'Платно', priceValue: 2, features: ['120+ голосов', '20+ языков', 'Профессиональное качество'], icon: 'AudioLines', gradient: 'from-emerald-500 to-green-500', popularity: 74 },
-    { id: 17, name: 'Otter.ai', category: 'Продуктивность', description: 'Транскрибация встреч и лекций в реальном времени', rating: 4.6, price: 'Freemium', priceValue: 1, features: ['Транскрибация', 'Саммари встреч', 'Интеграция Zoom'], icon: 'Headphones', gradient: 'from-blue-400 to-cyan-400', popularity: 80 },
-    { id: 18, name: 'Descript', category: 'Видео', description: 'Редактирование видео через текст и озвучка', rating: 4.7, price: 'Freemium', priceValue: 1, features: ['Текстовое редактирование', 'Удаление пауз', 'Клонирование голоса'], icon: 'Clapperboard', gradient: 'from-violet-500 to-purple-500', popularity: 78 },
-    { id: 19, name: 'Grammarly', category: 'Текст', description: 'ИИ-ассистент для улучшения текста и грамматики', rating: 4.7, price: 'Freemium', priceValue: 1, features: ['Проверка грамматики', 'Улучшение стиля', 'Тональность'], icon: 'CheckCircle', gradient: 'from-green-400 to-emerald-400', popularity: 91 },
-    { id: 20, name: 'Cursor', category: 'Код', description: 'IDE со встроенным ИИ для программирования', rating: 4.8, price: 'Freemium', priceValue: 1, features: ['ИИ-редактор', 'Чат с кодом', 'Автодополнение'], icon: 'Terminal', gradient: 'from-slate-500 to-gray-500', popularity: 89 },
-    { id: 21, name: 'Canva AI', category: 'Дизайн', description: 'Умные инструменты дизайна для всех', rating: 4.5, price: 'Freemium', priceValue: 1, features: ['Генерация дизайна', 'Magic Edit', 'Шаблоны'], icon: 'Paintbrush', gradient: 'from-purple-400 to-pink-400', popularity: 93 },
-    { id: 22, name: 'HeyGen', category: 'Видео', description: 'Создание видео с AI-аватарами за минуты', rating: 4.5, price: 'Платно', priceValue: 2, features: ['Видео-аватары', 'Перевод голоса', 'Кастомные аватары'], icon: 'UserCircle', gradient: 'from-orange-400 to-red-400', popularity: 76 },
-    { id: 23, name: 'Writesonic', category: 'Маркетинг', description: 'ИИ для создания SEO-оптимизированного контента', rating: 4.4, price: 'Freemium', priceValue: 1, features: ['SEO-оптимизация', 'Статьи', 'Реклама'], icon: 'Megaphone', gradient: 'from-indigo-400 to-purple-400', popularity: 72 },
-    { id: 24, name: 'Replicate', category: 'Разработка', description: 'Платформа для запуска open-source AI моделей', rating: 4.6, price: 'Платно', priceValue: 2, features: ['API доступ', 'Множество моделей', 'Масштабирование'], icon: 'Cpu', gradient: 'from-cyan-400 to-teal-400', popularity: 70 }
-  ];
-
-  const categories = ['Все', 'Текст', 'Изображения', 'Видео', 'Аудио', 'Код', 'Маркетинг', 'Продуктивность', 'Дизайн', 'Поиск', 'Разработка'];
   const [selectedCategory, setSelectedCategory] = useState('Все');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<'rating' | 'price' | 'popularity'>('popularity');

@@ -5,40 +5,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
-
-interface AITool {
-  id: number;
-  name: string;
-  category: string;
-  description: string;
-  rating: number;
-  price: string;
-  priceValue: number;
-  priceDetails: string;
-  features: string[];
-  icon: string;
-  gradient: string;
-  popularity: number;
-  pros: string[];
-  cons: string[];
-}
+import { aiTools, AITool } from '@/data/aiTools';
 
 const Compare = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  
-  const aiTools: AITool[] = [
-    { id: 1, name: 'ChatGPT', category: 'Текст', description: 'Продвинутый языковой ИИ для генерации текста и диалогов', rating: 4.9, price: 'Freemium', priceValue: 1, priceDetails: 'Бесплатно + $20/мес Pro', features: ['Генерация текста', 'Диалоги', 'Написание кода', 'Анализ данных', 'Работа с файлами', 'Веб-поиск'], icon: 'MessageSquare', gradient: 'from-purple-500 to-pink-500', popularity: 98, pros: ['Естественный диалог', 'Широкий спектр задач', 'Большой контекст'], cons: ['Платная подписка для GPT-4', 'Может ошибаться'] },
-    { id: 2, name: 'Midjourney', category: 'Изображения', description: 'Создание уникальных изображений из текстовых описаний', rating: 4.8, price: 'Платно', priceValue: 2, priceDetails: 'От $10/мес', features: ['Генерация изображений', 'Высокое качество (до 2K)', 'Стилизация', 'Вариации изображений', 'Ремикс и блэнд', 'Коммерческое использование'], icon: 'Image', gradient: 'from-blue-500 to-cyan-500', popularity: 95, pros: ['Лучшее качество', 'Художественный стиль', 'Активное сообщество'], cons: ['Только через Discord', 'Нет бесплатного тарифа'] },
-    { id: 3, name: 'ElevenLabs', category: 'Аудио', description: 'Реалистичный синтез голоса и клонирование', rating: 4.7, price: 'Freemium', priceValue: 1, priceDetails: 'Бесплатно + от $5/мес', features: ['Синтез речи', 'Клонирование голоса', '29 языков', 'API доступ', 'Эмоции в голосе', 'Дубляж видео'], icon: 'Mic', gradient: 'from-green-500 to-emerald-500', popularity: 88, pros: ['Самый реалистичный голос', 'Много языков', 'Быстрая генерация'], cons: ['Ограничения бесплатного плана', 'Иногда артефакты'] },
-    { id: 4, name: 'Runway ML', category: 'Видео', description: 'Генерация и редактирование видео с помощью ИИ', rating: 4.6, price: 'Freemium', priceValue: 1, priceDetails: 'Бесплатно + от $12/мес', features: ['Text-to-Video', 'Image-to-Video', 'Удаление фона', 'Motion tracking', 'Inpainting', '30+ AI инструментов'], icon: 'Video', gradient: 'from-orange-500 to-red-500', popularity: 85, pros: ['Множество AI-инструментов', 'Простой интерфейс', 'Gen-2 модель'], cons: ['Ограниченная длина видео', 'Очереди генерации'] },
-    { id: 5, name: 'GitHub Copilot', category: 'Код', description: 'ИИ-помощник для написания кода', rating: 4.8, price: 'Платно', priceValue: 2, priceDetails: '$10/мес', features: ['Автодополнение кода', 'Генерация функций', 'Рефакторинг', 'Объяснение кода', 'Множество языков', 'Чат в IDE'], icon: 'Code', gradient: 'from-indigo-500 to-purple-500', popularity: 92, pros: ['Отличное автодополнение', 'Поддержка всех языков', 'Интеграция с VS Code'], cons: ['Платная подписка', 'Требует проверки кода'] },
-    { id: 6, name: 'Jasper AI', category: 'Маркетинг', description: 'Контент для маркетинга и копирайтинга', rating: 4.5, price: 'Платно', priceValue: 2, priceDetails: 'От $39/мес', features: ['SEO-оптимизация', 'Рекламные копии', 'Email-рассылки', 'Посты для соцсетей', '50+ шаблонов', 'Командная работа'], icon: 'TrendingUp', gradient: 'from-yellow-500 to-orange-500', popularity: 82, pros: ['Специализация на маркетинге', 'Множество шаблонов', 'SEO-помощник'], cons: ['Высокая цена', 'Нет бесплатного плана'] },
-    { id: 7, name: 'Claude AI', category: 'Текст', description: 'Умный ассистент для сложных задач и анализа', rating: 4.8, price: 'Freemium', priceValue: 1, priceDetails: 'Бесплатно + $20/мес Pro', features: ['Длинные контексты', 'Анализ документов', 'Безопасность', 'Генерация текста', 'Диалоги', 'Написание кода'], icon: 'Brain', gradient: 'from-violet-500 to-purple-500', popularity: 90, pros: ['Длинный контекст', 'Безопасность', 'Отличный анализ'], cons: ['Медленнее ChatGPT', 'Меньше плагинов'] },
-    { id: 8, name: 'DALL-E 3', category: 'Изображения', description: 'Генерация изображений от OpenAI с высокой точностью', rating: 4.7, price: 'Freemium', priceValue: 1, priceDetails: 'Через ChatGPT Plus ($20/мес)', features: ['Точность промпта', 'Интеграция с ChatGPT', 'Редактирование', 'Генерация изображений', 'Высокое качество', 'Простые промпты'], icon: 'Palette', gradient: 'from-pink-500 to-rose-500', popularity: 87, pros: ['Точно следует промпту', 'Интеграция с ChatGPT', 'Простота использования'], cons: ['Дорого', 'Меньше стилей чем Midjourney'] },
-    { id: 9, name: 'Stable Diffusion', category: 'Изображения', description: 'Открытая нейросеть для генерации изображений', rating: 4.6, price: 'Бесплатно', priceValue: 0, priceDetails: 'Open Source, бесплатно', features: ['Open Source', 'Кастомизация', 'Локальный запуск', 'Генерация изображений', 'Множество моделей', 'API доступ'], icon: 'Layers', gradient: 'from-cyan-500 to-blue-500', popularity: 84, pros: ['Бесплатно', 'Open Source', 'Полный контроль'], cons: ['Сложная установка', 'Требует мощный ПК'] },
-    { id: 10, name: 'Perplexity AI', category: 'Поиск', description: 'Умный поисковик с источниками и анализом', rating: 4.7, price: 'Freemium', priceValue: 1, priceDetails: 'Бесплатно + $20/мес Pro', features: ['Поиск с источниками', 'Актуальные данные', 'Быстрый ответ', 'Цитирование', 'Множество моделей', 'Файлы и изображения'], icon: 'Search', gradient: 'from-blue-500 to-indigo-500', popularity: 79, pros: ['Актуальные данные', 'Источники', 'Быстрый поиск'], cons: ['Ограничения бесплатной версии', 'Меньше возможностей чем ChatGPT'] }
-  ];
 
   const [selectedTools, setSelectedTools] = useState<number[]>([]);
 
