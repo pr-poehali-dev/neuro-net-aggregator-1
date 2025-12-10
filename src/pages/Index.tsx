@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -21,6 +22,7 @@ interface AITool {
 }
 
 const Index = () => {
+  const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('home');
 
   const aiTools: AITool[] = [
@@ -242,7 +244,12 @@ const Index = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredTools.map((tool, index) => (
-                <Card key={tool.id} className="group hover:shadow-xl transition-all duration-300 animate-scale-in bg-card/50 backdrop-blur-sm border-border/50" style={{ animationDelay: `${index * 50}ms` }}>
+                <Card 
+                  key={tool.id} 
+                  className="group hover:shadow-xl transition-all duration-300 animate-scale-in bg-card/50 backdrop-blur-sm border-border/50 cursor-pointer" 
+                  style={{ animationDelay: `${index * 50}ms` }}
+                  onClick={() => navigate(`/tool/${tool.id}`)}
+                >
                   <CardHeader>
                     <div className="flex items-start justify-between mb-3">
                       <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${tool.gradient} flex items-center justify-center group-hover:scale-110 transition-transform`}>
